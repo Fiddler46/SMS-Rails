@@ -9,8 +9,9 @@ development:
   <<: *default
   database: SMS_Rails_development
   pool: 5
+  host: localhost
   username: fiddler
-  password: 
+  password: password
 
   
 test:
@@ -21,5 +22,5 @@ test:
 production:
   <<: *default
   database: SMS_Rails_production
-  username: SMS_Rails
-  password: <%= ENV['SMS_RAILS_DATABASE_PASSWORD'] %>
+  username: fiddler
+  password: password

@@ -36,6 +36,7 @@ class DevelopersController < ApplicationController
   # DELETE /developers/1
   def destroy
     @developer.destroy
+    render json: {status: 'Deleted', message: 'Deleted developer', data:@developer}, status: :ok
   end
 
   private
