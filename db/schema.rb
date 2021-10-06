@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 2021_10_03_134722) do
   create_table "teams", force: :cascade do |t|
     t.string "name"
     t.string "dept_name"
-    t.string "dev_ids", default: [], array: true
+    t.integer "dev_ids", default: [], array: true
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
