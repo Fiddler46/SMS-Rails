@@ -17,12 +17,23 @@ class TeamsController < ApplicationController
   def create
     @team = Team.new(plus_params)
 
-    if @team.save
-      render json: @team, status: :created, location: @team
-    else
-      render json: @team.errors, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      # if plus_params.has_key?(:dev_ids)
+      #   @team.developer_ids << Developer.find(plus_params.dev_ids)
+      # end
+
+      # if plus_params.has_key?(:developer_attributes)
+      #   @team.developers << Developer.insert_all(plus_params.developer_attributes)
+      # end
+
+      @team.save!
     end
+
+    render json: @team, status: :created, location: @team
+  rescue
+    render json: @team.errors, status: :unprocessable_entity
   end
+
 
   # PATCH/PUT /teams/1
   def update
@@ -50,7 +61,6 @@ class TeamsController < ApplicationController
     end
 
     def plus_params
-      params[:developer_attributes] = params[:developer]
-      params.require(:team).permit(:name, :dept_name, dev_ids: [], :developer_attributes => [:full_name, :email, :mobile])
+      params.require(:team).permit(:name, :dept_name, dev_ids: [], :developers_attributes => [:full_name, :email, :mobile])
     end
 end

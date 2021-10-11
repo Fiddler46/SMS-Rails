@@ -2,5 +2,7 @@ Rails.application.routes.draw do
   resources :teams
   resources :messages
   resources :developers
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  
+  post 'trigger_notification' => 'trigger#notification'
+
 end

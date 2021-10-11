@@ -3,7 +3,6 @@ class CreateTeams < ActiveRecord::Migration[6.1]
     create_table :teams do |t|
       t.string :name
       t.string :dept_name
-      t.integer :dev_ids, array: true, default: []
 
       t.timestamps
     end
