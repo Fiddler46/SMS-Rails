@@ -5,9 +5,6 @@ class TriggerController < ApplicationController
         @id = params[:team_id]
         @content = params[:content]
         @title = params[:title]
-        # @mob = Team.joins(:developers).where(team_id: @id).pluck(:mobile)
-        # @mob = Team.joins(:developers).pluck(:mobile)
-        # @mob = Team.includes(:developers).find(@id).pluck(:'developers.mobile')
         @mob = Team.find(params[:team_id]).developers.pluck(:mobile)
         @mail = Team.find(params[:team_id]).developers.pluck(:email)
         tim = Time.now
