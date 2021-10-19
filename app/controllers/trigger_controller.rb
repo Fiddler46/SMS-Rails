@@ -8,15 +8,15 @@ class TriggerController < ApplicationController
         # @mob = Team.joins(:developers).where(team_id: @id).pluck(:mobile)
         # @mob = Team.joins(:developers).pluck(:mobile)
         # @mob = Team.includes(:developers).find(@id).pluck(:'developers.mobile')
-         @mob = Team.find(params[:team_id]).developers.pluck(:mobile)
+        @mob = Team.find(params[:team_id]).developers.pluck(:mobile)
         @mail = Team.find(params[:team_id]).developers.pluck(:email)
         tim = Time.now
 
         if @message.save
           respond_to do |format|
             format.json { render json: { 'Response' => {:team_id => @id, 
-                'sms' => { "id" => SecureRandom.uuid, :mobile => @mob, :content => @content, "sent_at" => tim }, 
-                'email' => { "id" => SecureRandom.uuid, :email => @mail, :title => @title, :content => @content, "sent_at" => tim } } } }
+                'sms' => { "id" => SecureRandom.uuid, "mobile" => @mob, :content => @content, "sent_at" => tim }, 
+                'email' => { "id" => SecureRandom.uuid, "email" => @mail, :title => @title, :content => @content, "sent_at" => tim } } } }
           end
         else
             render json: @message.errors, status: :unprocessable_entity

@@ -3,35 +3,40 @@ class TeamsController < ApplicationController
 
   # GET /teams
   def index
-    @teams = Team.all
+    @teams = Team.all.map do |team|
+      response = team.attributes
+      response[:dev_ids] = team.developer_ids
+
+      response
+    end
 
     render json: @teams
   end
 
   # GET /teams/1
   def show
-    render json: @team
+    response = @team.attributes
+    response[:dev_ids] = @team.developer_ids
+
+    render json: response
   end
 
   # POST /teams
   def create
-    @team = Team.new(plus_params)
+    dev_ids = plus_params[:dev_ids]
 
-    ActiveRecord::Base.transaction do
-      # if plus_params.has_key?(:dev_ids)
-      #   @team.developer_ids << Developer.find(plus_params.dev_ids)
-      # end
+    @team = Team.new(plus_params.except(:dev_ids))
+  
+    if @team.save
+      unless dev_ids.nil?
+        @team.developers << Developer.find(dev_ids)
+        @team.save!
+      end
 
-      # if plus_params.has_key?(:developer_attributes)
-      #   @team.developers << Developer.insert_all(plus_params.developer_attributes)
-      # end
-
-      @team.save!
+      render json: @team, status: :created, location: @team
+    else
+      render json: @team.errors, status: :unprocessable_entity
     end
-
-    render json: @team, status: :created, location: @team
-  rescue
-    render json: @team.errors, status: :unprocessable_entity
   end
 
 
@@ -62,5 +67,7 @@ class TeamsController < ApplicationController
 
     def plus_params
       params.require(:team).permit(:name, :dept_name, dev_ids: [], :developers_attributes => [:full_name, :email, :mobile])
+  
     end
 end
+
